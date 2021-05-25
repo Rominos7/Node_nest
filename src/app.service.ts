@@ -12,7 +12,7 @@ export class AppService {
     return 'www.google.com';
   }
   postDataSendNumbers(): number[] {
-    const numberArray = [1,2,3,4,5]
+    const numberArray = [1,2,3,4,5];
     return numberArray;
   }
 }
