@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { config } from './ormconfig';
 
+console.log(config);
 @Module({
-    imports : [
-        TypeOrmModule.forRoot(config)
-    ]
+  imports: [TypeOrmModule.forRoot(config)],
 })
-
 export class DatabaseModule {}
