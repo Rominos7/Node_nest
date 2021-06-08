@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 class Tasks {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   public id: number;
   @Column()
   public status: string;
