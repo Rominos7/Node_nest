@@ -7,8 +7,8 @@ export const config: TypeOrmModuleOptions = {
   username: 'postgres',
   password: 'admin',
   database: 'task_manager',
-  entities: ['src/**/*.entity.ts'],
-  migrations: ['src/migrations/*.ts'],
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  migrations: ['dist/migrations/*{.ts,.js}'],
   schema: 'public',
   cli: {
     migrationsDir: 'src/migrations',

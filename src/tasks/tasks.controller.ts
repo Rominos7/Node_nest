@@ -3,11 +3,10 @@ import { TasksService } from './tasks.service';
 
 @Controller()
 export class TasksController {
-    constructor(private readonly tasksService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) {}
 
-    @Post('/add_line')
-    createNewLine(){
-        return this.tasksService.createNewLine();
-    }
-
+  @Post('/tasks')
+  createNewLine() {
+    return this.tasksService.addNewTask();
+  }
 }
