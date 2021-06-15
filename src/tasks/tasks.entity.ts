@@ -2,7 +2,9 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum TaskStatus {
   Active = 'active',
-  Completed = 'completed',
+  Solved = 'solved',
+  Pending = 'pending',
+  ON_Hold = 'on hold', // OnHold or ON_Hold ?? How to name better?
 }
 @Entity()
 class Tasks {
