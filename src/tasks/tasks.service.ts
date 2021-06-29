@@ -27,7 +27,8 @@ export class TasksService {
 
   async updateTask(id:ValidateId) {
     let taskToUpdate: RequestIsNotEmpty = await this.tasksRepostiory.findOne(id);
-    taskToUpdate.status = TaskStatus.Solved; // here some changes to update. Need to expand this later
+    // TODO: For more changes to update need to expand this "line"
+    taskToUpdate.status = TaskStatus.Solved;
     return this.tasksRepostiory.save(taskToUpdate);
   }
 

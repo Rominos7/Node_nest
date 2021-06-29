@@ -1,5 +1,4 @@
 import { Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-// import { TasksGuard } from './tasks.guard'; work with guards
 import { TasksService } from './tasks.service';
 import { ValidateId } from './tasks.validators';
 
