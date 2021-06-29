@@ -4,7 +4,7 @@ export enum TaskStatus {
   Active = 'active',
   Solved = 'solved',
   Pending = 'pending',
-  ON_Hold = 'on hold', // OnHold or ON_Hold ?? How to name better?
+  OnHold = 'on hold',
 }
 @Entity()
 class Tasks {
