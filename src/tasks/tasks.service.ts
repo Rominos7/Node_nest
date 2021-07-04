@@ -1,8 +1,8 @@
-import { HttpException, HttpStatus, Injectable, Param, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Tasks, { TaskStatus } from './tasks.entity';
 import { TasksRepostiory } from './tasks.repostiory';
-import { ValidateId, RequestIsNotEmpty } from './tasks.validators';
+import { RequestIsNotEmpty } from './tasks.validators';
 
 @Injectable()
 export class TasksService {
@@ -25,14 +25,14 @@ export class TasksService {
     return this.tasksRepostiory.find(); 
   }
 
-  async updateTask(id:ValidateId) {
+  async updateTask(id: number) {
     let taskToUpdate: RequestIsNotEmpty = await this.tasksRepostiory.findOne(id);
     // TODO: For more changes to update need to expand this "line"
     taskToUpdate.status = TaskStatus.Solved;
     return this.tasksRepostiory.save(taskToUpdate);
   }
 
-  async deleteTask(id:ValidateId) {
+  async deleteTask(id: number) {
     const removeTask: RequestIsNotEmpty = await this.tasksRepostiory.findOne(id);
     return this.tasksRepostiory.delete(removeTask);
   }
