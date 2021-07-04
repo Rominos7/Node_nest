@@ -1,15 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Tasks, { TaskStatus } from './tasks.entity';
 import { TasksRepostiory } from './tasks.repostiory';
-
-type Task = {
-  id: number;
-  status: string;
-  taskName: string;
-  startDate: Date;
-  finishDate: Date;
-};
+import { RequestIsNotEmpty } from './tasks.validators';
 
 @Injectable()
 export class TasksService {
@@ -24,37 +17,23 @@ export class TasksService {
     newTask.taskName = 'Hold my bear';
     newTask.startDate = new Date();
     newTask.finishDate = new Date();
-    console.log('Field added');
 
     return this.tasksRepostiory.save(newTask);
   }
 
   async getAllTasks() {
-    const allTasks = await this.tasksRepostiory.find();
-    console.log('All tasks in DB', allTasks);
-    
-    return allTasks;
+    return this.tasksRepostiory.find(); 
   }
 
-  async updateTask(id:number) {
-    let taskToUpdate = await this.tasksRepostiory.findOne(id);
-    if (taskToUpdate) {
-        taskToUpdate.status = TaskStatus.Solved;
-        console.log('Task was updated', taskToUpdate);
-
-        return this.tasksRepostiory.save(taskToUpdate);
-    }
-    throw new HttpException('ID not found', HttpStatus.NOT_FOUND);
-    
+  async updateTask(id: number) {
+    let taskToUpdate: RequestIsNotEmpty = await this.tasksRepostiory.findOne(id);
+    // TODO: For more changes to update need to expand this "line"
+    taskToUpdate.status = TaskStatus.Solved;
+    return this.tasksRepostiory.save(taskToUpdate);
   }
 
-  async deleteTask(id:number) {
-    const removeTask = await this.tasksRepostiory.findOne(id);
-    if (removeTask) {
-        console.log('Removed task', removeTask);
-
-        return this.tasksRepostiory.remove(removeTask);
-    }
-    throw new HttpException('ID not found', HttpStatus.NOT_FOUND);
+  async deleteTask(id: number) {
+    const removeTask: RequestIsNotEmpty = await this.tasksRepostiory.findOne(id);
+    return this.tasksRepostiory.delete(removeTask);
   }
 }
