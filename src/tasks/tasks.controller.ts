@@ -1,10 +1,12 @@
-import { Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 
 import { RequestTasksIDGuard } from './tasks.guard';
 import { TasksService } from './tasks.service';
 import { TasksIdDto } from './dto/tasks-id.dto';
+import { GeneralInterseptor } from './tasks.interceptor';
 
 @Controller()
+@UseInterceptors(GeneralInterseptor)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
