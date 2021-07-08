@@ -1,11 +1,14 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Response } from "@nestjs/common";
 import { Observable } from 'rxjs'
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
+
+export interface Response<T> {
+    data: T;
+  }
 
 @Injectable()
-export class GeneralInterseptor implements NestInterceptor {
+export class RequestInterseptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-        console.log('Was request');
         const qetRequest = context.switchToHttp().getRequest();
         const method = qetRequest.method;
         const url = qetRequest.url;
@@ -16,11 +19,28 @@ export class GeneralInterseptor implements NestInterceptor {
         .handle()
         .pipe(
             tap(()=> console.log(
+                `Was request \n`+
                 `Method: ${method} \n`+
                 `URL: ${url} \n`+
                 `Params: ${JSON.stringify(params)} \n`+
                 `Body: ${JSON.stringify(body)} \n`
             ))
         )
+    }
+}
+
+@Injectable()
+export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
+    intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+        
+        const qetResponse = context.switchToHttp().getResponse();
+        return next
+        .handle()
+        .pipe(
+            tap(()=>{
+                // How to get body out of qetResponse ???
+                console.log('respons',qetResponse);
+            })
+      );    
     }
 }

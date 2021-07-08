@@ -3,10 +3,10 @@ import { Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors }
 import { RequestTasksIDGuard } from './tasks.guard';
 import { TasksService } from './tasks.service';
 import { TasksIdDto } from './dto/tasks-id.dto';
-import { GeneralInterseptor } from './tasks.interceptor';
+import { RequestInterseptor,  ResponseInterceptor } from './tasks.interceptor';
 
 @Controller()
-@UseInterceptors(GeneralInterseptor)
+@UseInterceptors(RequestInterseptor, ResponseInterceptor)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
