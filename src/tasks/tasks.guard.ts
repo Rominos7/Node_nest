@@ -1,15 +1,39 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Observable } from 'rxjs';
+import { EntityNotFoundError } from 'typeorm';
+import { TasksRepostiory } from './tasks.repostiory';
 
-// this was my work with guards. Nothing fansy. 
+
 @Injectable()
-export class TasksGuard implements CanActivate {
-    canActivate(
+export class RequestTasksIDGuard implements CanActivate {
+  constructor(
+    @InjectRepository(TasksRepostiory)
+    private readonly tasksRepostiory: TasksRepostiory,
+  ) {}
+  
+  async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('log', context);
-    return true;
+  ): Promise<boolean> {
+
+    const qetRequest = context.switchToHttp().getRequest();
+    const id = qetRequest.params.id;
+
+    // as I get it next line of code will return request field or false it field not found 
+    try {
+      await this.tasksRepostiory.findOneOrFail(id);
+
+      return true;
+    } catch (err) {
+      if (err instanceof EntityNotFoundError) {
+        throw new HttpException({
+          status: HttpStatus.FORBIDDEN,
+          error: 'This ID is not present in DB',
+        }, HttpStatus.FORBIDDEN);
+      }
+      
+      throw err;
+    }
   }
 }
 
