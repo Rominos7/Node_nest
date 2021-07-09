@@ -13,7 +13,7 @@ export class RequestInterseptor implements NestInterceptor {
         const method = qetRequest.method;
         const url = qetRequest.url;
         const params = qetRequest.params;
-        const body = qetRequest.res.body;
+        const body = qetRequest.body;
 
         return next
         .handle()
@@ -22,8 +22,8 @@ export class RequestInterseptor implements NestInterceptor {
                 `Was request \n`+
                 `Method: ${method} \n`+
                 `URL: ${url} \n`+
-                `Params: ${JSON.stringify(params)} \n`+
-                `Body: ${JSON.stringify(body)} \n`
+                `Params: ${JSON.stringify(params, null , 2)} \n`+
+                `Body: ${JSON.stringify(body, null, 2)} \n`
             ))
         )
     }
