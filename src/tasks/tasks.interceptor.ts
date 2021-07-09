@@ -37,9 +37,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         return next
         .handle()
         .pipe(
-            tap(()=>{
-                // How to get body out of qetResponse ???
-                console.log('respons',qetResponse);
+            map(data => {
+                console.log(data, 'RESPONSE');
+                return data;
             })
       );    
     }
