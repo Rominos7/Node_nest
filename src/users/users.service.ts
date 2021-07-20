@@ -19,17 +19,18 @@ export class UsersService {
     async signUp(credentials:UserCredentials) {
         const {login, password} = credentials;
         const newUser = new Users();
-        
+
         newUser.userLogin = login;
         // TODO: Add encryption for the password to set in DB
         newUser.userPassword = password;
         
         this.userRepository.save(newUser);
-
+        
         throw new HttpException({
             status: HttpStatus.CREATED,
             message: 'sing Up was successful',
         }, HttpStatus.CREATED);
+        
     }
 
     async signIn(credentials:UserCredentials) {
