@@ -1,27 +1,23 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 
 import { UsersService } from "./users.service";
-//TODO: Make one dto for checking credetials
-import { UserLoginDto } from "./dto/user-login.dto";
-import { UserPasswordDto } from "./dto/user-password.dto";
-
-//TODO: make shared type UserCredetials in folder "types"
-export type UserCredentials = {
-    login:string;
-    password:string;
-}
+import { UserDto } from "./dto/user.dto";
+import { ResponseInterceptor } from "./users.interseptor";
+import { SingInUserGuard } from "./users.guard";
 
 @Controller()
+@UseInterceptors(ResponseInterceptor)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post('/signUp')
-    createUser(@Body() credentials:UserCredentials) {
+    createUser(@Body() credentials:UserDto) {
         return this.usersService.signUp(credentials);
     }
 
     @Post('/signIn')
-    checkUser(@Body() credentials:UserCredentials) {
+    @UseGuards(SingInUserGuard)
+    checkUser(@Body() credentials:UserDto) {
         return this.usersService.signIn(credentials);
     }
 
