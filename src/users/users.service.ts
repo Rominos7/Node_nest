@@ -23,32 +23,35 @@ export class UsersService {
         newUser.userLogin = login;
         // TODO: Add encryption for the password to set in DB
         newUser.userPassword = password;
+        const user = this.userRepository.save(newUser);
         
-        this.userRepository.save(newUser);
-        
-        throw new HttpException({
+        return {
+            user: user,
             status: HttpStatus.CREATED,
             message: 'sing Up was successful',
-        }, HttpStatus.CREATED);
-        
+        }
+
     }
 
     async signIn(credentials:UserCredentials) {
-        // TODO: Do the login check in guard. Same we can do for password
         const {login, password} = credentials;
 
-        let user = await this.userRepository.findOne(login);
-        // TODO: This is a simple concept for password comparison. Change for better one 
-        if(user.userPassword === password){
-            throw new HttpException({
-                status: HttpStatus.OK,
-                message: 'sing In was successful',
-            }, HttpStatus.OK);
-        } 
-
-        throw new HttpException({
+        const expretionFail =  new HttpException({
             status: HttpStatus.UNAUTHORIZED,
             message: 'wrong password',
         }, HttpStatus.UNAUTHORIZED);
+
+        let user = await this.userRepository.findOne({userLogin:login});
+
+        // TODO: This is a simple concept for password comparison. Change for better one 
+        if(user.userPassword === password){
+            return {
+                user: user,
+                statusCode: HttpStatus.OK,
+                message: 'sing In was successful',
+            }
+        }
+
+        throw expretionFail;
     }
 }
