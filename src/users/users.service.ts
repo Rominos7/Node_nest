@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import Users from './users.entity';
 import { UsersRepository } from "./users.repository";
+import * as bcrypt from 'bcrypt';
 
 export type UserCredentials = {
     login:string;
@@ -21,8 +22,7 @@ export class UsersService {
         const newUser = new Users();
 
         newUser.userLogin = login;
-        // TODO: Add encryption for the password to set in DB
-        newUser.userPassword = password;
+        newUser.userPassword = await bcrypt.hash(password, 10);
         const user = this.userRepository.save(newUser);
         
         return {
@@ -43,8 +43,7 @@ export class UsersService {
 
         let user = await this.userRepository.findOne({userLogin:login});
 
-        // TODO: This is a simple concept for password comparison. Change for better one 
-        if(user.userPassword === password){
+        if(await bcrypt.compare(password, user.userPassword)){
             return {
                 user: user,
                 statusCode: HttpStatus.OK,
